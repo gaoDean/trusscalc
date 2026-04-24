@@ -27,7 +27,7 @@ const loads = [
 	{ id: 'l-1', nodeId: 'v-4', fx: 0, fy: -10000 },
 	{ id: 'l-2', nodeId: 'v-5', fx: 0, fy: -10000 }
 ];
-const settings = { safetyFactor: 2.0 };
+const settings = { safetyFactor: 2.0, aspectRatioN: 1, aspectRatioM: 2, baseThickness: 5 };
 
 const res = solveTruss(vertices, materials, members, supports, loads, settings);
 console.log(JSON.stringify(res, null, 2));

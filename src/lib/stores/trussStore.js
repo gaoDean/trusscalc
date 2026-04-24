@@ -64,4 +64,4 @@ const defaultLoads = [
 ];
 
 export const loads = createLocalStore('truss_loads', defaultLoads);
-export const settings = createLocalStore('truss_settings', { safetyFactor: 2.0 });
+export const settings = createLocalStore('truss_settings', { safetyFactor: 2.0, aspectRatioN: 1, aspectRatioM: 2, baseThickness: 5 });

@@ -83,7 +83,7 @@
 					x1={vA.x} y1={yMap(vA.y)}
 					x2={vB.x} y2={yMap(vB.y)}
 					stroke={mRes.type === 'Tension' ? '#0000ff' : (mRes.type === 'Compression' ? '#ff0000' : '#888888')}
-					stroke-width={Math.max(mRes.profile.height, spanX * 0.005)}
+					stroke-width={Math.max(Math.sqrt(mRes.requiredA), spanX * 0.001)}
 					stroke-linecap="square"
 					style="pointer-events: none;"
 				/>
@@ -95,12 +95,12 @@
 			{@const v = getVertex(sup.nodeId)}
 			{#if v}
 				<polygon 
-					points="{v.x},{yMap(v.y)} {v.x - spanX*0.03},{yMap(v.y) + spanX*0.05} {v.x + spanX*0.03},{yMap(v.y) + spanX*0.05}" 
-					fill="#00ff00" stroke="#111" stroke-width={spanX*0.003}
+					points="{v.x},{yMap(v.y)} {v.x - spanX*0.015},{yMap(v.y) + spanX*0.025} {v.x + spanX*0.015},{yMap(v.y) + spanX*0.025}" 
+					fill="#00ff00" stroke="#111" stroke-width={spanX*0.0015}
 				/>
 				{#if sup.fixX && !sup.fixY}
 					<!-- Roller X -->
-					<circle cx={v.x} cy={yMap(v.y) + spanX*0.06} r={spanX*0.01} fill="#00ff00" stroke="#111" stroke-width={spanX*0.003} />
+					<circle cx={v.x} cy={yMap(v.y) + spanX*0.03} r={spanX*0.005} fill="#00ff00" stroke="#111" stroke-width={spanX*0.0015} />
 				{/if}
 			{/if}
 		{/each}
@@ -109,7 +109,7 @@
 		{#each $loads as l}
 			{@const v = getVertex(l.nodeId)}
 			{#if v}
-				{@const loadLen = spanX * 0.1}
+				{@const loadLen = spanX * 0.05}
 				{@const mag = Math.sqrt(l.fx*l.fx + l.fy*l.fy)}
 				{@const dx = (l.fx / mag) * loadLen}
 				{@const dy = -(l.fy / mag) * loadLen} <!-- Negative because SVG y is inverted -->
@@ -118,7 +118,7 @@
 					x1={v.x - dx} y1={yMap(v.y) - dy} 
 					x2={v.x} y2={yMap(v.y)} 
 					stroke="#ffff00" 
-					stroke-width={spanX * 0.01} 
+					stroke-width={spanX * 0.005} 
 					marker-end="url(#arrow)" 
 				/>
 			{/if}
@@ -126,7 +126,7 @@
 
 		<!-- Draw Vertices -->
 		{#each $vertices as v}
-			<rect x={v.x - spanX * 0.015} y={yMap(v.y) - spanX * 0.015} width={spanX * 0.03} height={spanX * 0.03} fill="#111" stroke="#fff" stroke-width={spanX * 0.005} />
+			<rect x={v.x - spanX * 0.0075} y={yMap(v.y) - spanX * 0.0075} width={spanX * 0.015} height={spanX * 0.015} fill="#111" stroke="#fff" stroke-width={spanX * 0.0025} />
 		{/each}
 	</svg>
 

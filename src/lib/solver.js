@@ -176,7 +176,16 @@ export function solveTruss(vertices, materials, members, supports, loads, settin
 		// If we scale the whole profile proportionally by factor `s`:
 		// new_A = A_base * s^2
 		// new_I = I_base * s^4
-		const { A: baseA, I: baseI } = getBaselineProperties(member.profile);
+		
+		// Adjust profile based on global settings
+		const aspectRatio = (settings.aspectRatioN || 1) / (settings.aspectRatioM || 2);
+		const currentProfile = { 
+			...member.profile, 
+			width: member.profile.height * aspectRatio,
+			thickness: settings.baseThickness || 5
+		};
+
+		const { A: baseA, I: baseI } = getBaselineProperties(currentProfile);
 		
 		const scaleForA = Math.sqrt(requiredA / baseA);
 		const scaleForI = Math.pow(requiredI / baseI, 0.25);
@@ -189,9 +198,9 @@ export function solveTruss(vertices, materials, members, supports, loads, settin
 			requiredA,
 			requiredI,
 			profile: {
-				height: member.profile.height * scale,
-				width: member.profile.width * scale,
-				thickness: member.profile.thickness * scale
+				height: currentProfile.height * scale,
+				width: currentProfile.width * scale,
+				thickness: currentProfile.thickness * scale
 			}
 		};
 	});
