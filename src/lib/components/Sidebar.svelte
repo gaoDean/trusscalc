@@ -29,14 +29,4 @@
 		gap: 24px;
 		font-family: monospace;
 	}
-	.sidebar-heading {
-		margin-top: 0;
-		font-size: 1.875rem;
-		line-height: 2.25rem;
-		text-transform: uppercase;
-		letter-spacing: -0.05em;
-		border-bottom: 4px solid #111;
-		padding-bottom: 8px;
-		margin-bottom: 0;
-	}
 </style>

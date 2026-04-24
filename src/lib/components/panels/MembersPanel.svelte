@@ -13,7 +13,7 @@
 			nodeA, 
 			nodeB, 
 			materialId,
-			profile: { depth: 100, flangeWidth: 50, thickness: 5 } // default I-beam shape in mm
+			profile: { height: 100, width: 50, thickness: 5 } // default I-beam shape in mm
 		}]);
 	}
 

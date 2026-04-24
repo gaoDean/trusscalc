@@ -53,6 +53,7 @@ export function solveTruss(vertices, materials, members, supports, loads, settin
 		const dx = vB.x - vA.x;
 		const dy = vB.y - vA.y;
 		const L = Math.sqrt(dx * dx + dy * dy);
+		if (L === 0) return;
 		const c = dx / L;
 		const s = dy / L;
 
@@ -106,6 +107,14 @@ export function solveTruss(vertices, materials, members, supports, loads, settin
 			F[i] = 0;
 		}
 	}
+	
+	// Add tiny pseudo-stiffness to unconstrained diagonals to prevent singular matrices
+	// for isolated/unconnected vertices
+	for (let i = 0; i < 2 * N; i++) {
+		if (K[i][i] === 0) {
+			K[i][i] = 1e-9;
+		}
+	}
 
 	// Solve for displacements: U = K^-1 * F
 	let U;
@@ -134,7 +143,11 @@ export function solveTruss(vertices, materials, members, supports, loads, settin
 		
 		// v = [-c, -s, c, s] * u
 		const elongation = -c * u[0] - s * u[1] + c * u[2] + s * u[3];
-		const force = (member._E * member._A / member._L) * elongation; // >0 is Tension, <0 is Compression
+		let force = (member._E * member._A / member._L) * elongation; // >0 is Tension, <0 is Compression
+
+		if (isNaN(force) || !isFinite(force)) {
+			force = 0;
+		}
 
 		// Sizing
 		let requiredA = 0;

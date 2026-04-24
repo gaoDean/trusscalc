@@ -5,6 +5,10 @@
 	let result = $derived(solveTruss($vertices, $materials, $members, $supports, $loads, $settings));
 	let resultsData = $derived(result.results || { members: {}, nodes: [] });
 	let error = $derived(result.error);
+	
+	$effect(() => {
+		console.log("Solver result:", result);
+	});
 
 	// Viewbox calculations
 	let minX = $derived($vertices.length ? Math.min(...$vertices.map(v => v.x)) : 0);
@@ -42,7 +46,7 @@
 	}
 </script>
 
-<div class="canvas-container" on:mousemove={(e) => { mouseX = e.clientX; mouseY = e.clientY; }}>
+<div class="canvas-container" onmousemove={(e) => { mouseX = e.clientX; mouseY = e.clientY; }}>
 	{#if error}
 		<div class="error-banner">Solver Error: {error}</div>
 	{/if}
@@ -69,8 +73,8 @@
 					x2={vB.x} y2={yMap(vB.y)}
 					stroke="transparent"
 					stroke-width={spanX * 0.05}
-					on:mouseenter={(e) => handleMouse(e, m, mRes)}
-					on:mouseleave={clearHover}
+					onmouseenter={(e) => handleMouse(e, m, mRes)}
+					onmouseleave={clearHover}
 				/>
 				<!-- Actual visible line -->
 				<!-- Stroke width proportional to scaled thickness * width to approximate visual heft, or just use scaled height directly -->
@@ -91,7 +95,7 @@
 			{@const v = getVertex(sup.nodeId)}
 			{#if v}
 				<polygon 
-					points="{v.x},${yMap(v.y)} {v.x - spanX*0.03},${yMap(v.y) + spanX*0.05} {v.x + spanX*0.03},${yMap(v.y) + spanX*0.05}" 
+					points="{v.x},{yMap(v.y)} {v.x - spanX*0.03},{yMap(v.y) + spanX*0.05} {v.x + spanX*0.03},{yMap(v.y) + spanX*0.05}" 
 					fill="#00ff00" stroke="#111" stroke-width={spanX*0.003}
 				/>
 				{#if sup.fixX && !sup.fixY}
