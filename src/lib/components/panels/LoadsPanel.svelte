@@ -44,7 +44,14 @@
 	<ul>
 		{#each $loads as l}
 			<li>
-				<span>Node {l.nodeId.substring(0,6)}: ({l.fx}N, {l.fy}N)</span>
+				<span>
+					{#if $vertices.find(v => v.id === l.nodeId)}
+						({$vertices.find(v => v.id === l.nodeId).x}, {$vertices.find(v => v.id === l.nodeId).y}): 
+					{:else}
+						Unknown: 
+					{/if}
+					({l.fx}N, {l.fy}N)
+				</span>
 				<button onclick={() => removeLoad(l.id)}>X</button>
 			</li>
 		{/each}

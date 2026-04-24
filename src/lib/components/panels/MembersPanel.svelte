@@ -58,7 +58,19 @@
 	<ul>
 		{#each $members as m}
 			<li>
-				<span>{m.nodeA.substring(0,6)} &harr; {m.nodeB.substring(0,6)}</span>
+				<span>
+					{#if $vertices.find(v => v.id === m.nodeA)}
+						({$vertices.find(v => v.id === m.nodeA).x}, {$vertices.find(v => v.id === m.nodeA).y}) 
+					{:else}
+						Unknown
+					{/if}
+					&harr; 
+					{#if $vertices.find(v => v.id === m.nodeB)}
+						({$vertices.find(v => v.id === m.nodeB).x}, {$vertices.find(v => v.id === m.nodeB).y})
+					{:else}
+						Unknown
+					{/if}
+				</span>
 				<button onclick={() => removeMember(m.id)}>X</button>
 			</li>
 		{/each}

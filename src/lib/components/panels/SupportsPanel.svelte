@@ -42,7 +42,14 @@
 	<ul>
 		{#each $supports as s}
 			<li>
-				<span>Node {s.nodeId.substring(0,6)}: [X:{s.fixX ? 'L' : 'F'}, Y:{s.fixY ? 'L' : 'F'}]</span>
+				<span>
+					{#if $vertices.find(v => v.id === s.nodeId)}
+						({$vertices.find(v => v.id === s.nodeId).x}, {$vertices.find(v => v.id === s.nodeId).y}): 
+					{:else}
+						Unknown: 
+					{/if}
+					[X:{s.fixX ? 'L' : 'F'}, Y:{s.fixY ? 'L' : 'F'}]
+				</span>
 				<button onclick={() => removeSupport(s.nodeId)}>X</button>
 			</li>
 		{/each}
