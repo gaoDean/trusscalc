@@ -44,6 +44,19 @@
 	function clearHover() {
 		hoveredMember = null;
 	}
+
+	let maxForce = $derived(Object.values(resultsData.members).reduce((max, m) => Math.max(max, Math.abs(m.force)), 0));
+
+	function getColor(mRes) {
+		if (mRes.type === 'Zero' || maxForce === 0) return '#888888';
+		const intensity = Math.abs(mRes.force) / maxForce;
+		// Map intensity (0-1) to saturation and lightness for a better visual scale
+		// Tension: Blue (240), Compression: Red (0)
+		const hue = mRes.type === 'Tension' ? 240 : 0;
+		const saturation = 50 + intensity * 50; // 50% to 100%
+		const lightness = 70 - intensity * 30; // 70% to 40% (lighter for low force, darker/richer for high)
+		return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+	}
 </script>
 
 <div class="canvas-container" onmousemove={(e) => { mouseX = e.clientX; mouseY = e.clientY; }}>
@@ -82,8 +95,8 @@
 				<line
 					x1={vA.x} y1={yMap(vA.y)}
 					x2={vB.x} y2={yMap(vB.y)}
-					stroke={mRes.type === 'Tension' ? '#0000ff' : (mRes.type === 'Compression' ? '#ff0000' : '#888888')}
-					stroke-width={Math.max(Math.sqrt(mRes.requiredA), spanX * 0.001)}
+					stroke={getColor(mRes)}
+					stroke-width={Math.max(Math.sqrt(mRes.requiredA) * ($settings.displayScale || 1), spanX * 0.001)}
 					stroke-linecap="square"
 					style="pointer-events: none;"
 				/>
